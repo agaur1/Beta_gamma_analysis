@@ -28,7 +28,7 @@ void  Test_Modify( const string& fileName, std::string fitName = "" )
 {
     //cout<<"debug 1 " <<endl;
     // DEFINE OUTPUT ROOT FILE
-    TFile *file = new TFile("myfiles_mc_1_pmt.root","RECREATE");
+    TFile *file = new TFile("myfiles_mc_1_pmt_all.root","RECREATE");
     
     TCanvas *C = new TCanvas("c", "c",800,800);
     
@@ -39,8 +39,15 @@ void  Test_Modify( const string& fileName, std::string fitName = "" )
     // TH1D *h_nhitscleaned_scint = new TH1D("nhitscleaned_scint","nhitscleaned_scint",1000,0,1000);
     TH1D *h_costheta = new TH1D("costheta","costheta",50,-1,1);
     TH1D *h_dotvec = new TH1D("dotvec","dotvec",25,-1,1);
-    TH1D *h_costheta_new = new TH1D("costheta_new","costheta_new",25,-1,1);
-    TH1D *h_avgcosthetanew = new TH1D("avgcosthetanew","avgcosthetanew",10,0.5,1);
+    TH1D *h_costheta_new_1 = new TH1D("costheta_new_1","costheta_new_1",25,-1,1);
+    TH1D *h_avgcosthetanew_1 = new TH1D("avgcosthetanew_1","avgcosthetanew_1",25,-1,1);
+    TH1D *h_costheta_new_2 = new TH1D("costheta_new_2","costheta_new_2",25,-1,1);
+    TH1D *h_avgcosthetanew_2 = new TH1D("avgcosthetanew_2","avgcosthetanew_2",25,-1,1);
+     TH1D *h_costheta_new_3 = new TH1D("costheta_new_3","costheta_new_3",25,-1,1);
+    TH1D *h_avgcosthetanew_3 = new TH1D("avgcosthetanew_3","avgcosthetanew_3",25,-1,1);
+    TH1D *h_costheta_new_4 = new TH1D("costheta_new_4","costheta_new_4",25,-1,1);
+    TH1D *h_avgcosthetanew_4 = new TH1D("avgcosthetanew_4","avgcosthetanew_4",25,-1,1);
+
     //h_avgcosthetanew->Sumw2();
     TH1D *h_nhits_early = new TH1D("nhits_early","nhits_early",200,0,200);
     TH2D *h_theta_phi = new TH2D("h_theta_phi","theta-phi",200,-1,1,628,-3.14,3.14);
@@ -74,10 +81,22 @@ void  Test_Modify( const string& fileName, std::string fitName = "" )
     cout<<"Total Entries (dsReader.GetEntryCount()) = " << dsReader.GetEntryCount()<<endl;
     
     int count_nhits_early=0;
-    double count_costhetawhole = 0;
-    double countcostheta_GT0P7=0;
-    double count_costhetanew;
-    double countcostheta_new_GT0P7;
+    double count_costhetawhole_1 = 0;
+    double countcostheta_GT0P7_1=0;
+    double count_costhetanew_1;
+    double countcostheta_new_GT0P7_1;
+      double count_costhetawhole_2 = 0;
+    double countcostheta_GT0P7_2=0;
+    double count_costhetanew_2;
+    double countcostheta_new_GT0P7_2;
+    double count_costhetawhole_3 = 0;
+    double countcostheta_GT0P7_3=0;
+    double count_costhetanew_3;
+    double countcostheta_new_GT0P7_3;
+    double count_costhetawhole_4 = 0;
+    double countcostheta_GT0P7_4=0;
+    double count_costhetanew_4;
+    double countcostheta_new_GT0P7_4;
     //double Total_event_triggered=0;
     //double Total_event_triggered_0=0;
    //double Total_event_triggered_1=0;
@@ -219,7 +238,7 @@ void  Test_Modify( const string& fileName, std::string fitName = "" )
             // cout<<"cos_theta="<<cos(eventPosition_2.Theta())<<" ,phi = "<<eventPosition_2.Phi()<<endl;
             h_theta_phi_int->Fill(cos(eventPosition_2.Theta()),eventPosition_2.Phi());
             
-            double avg_costheta=0;
+            double sum_costheta_1=0;
            // double Total = 0;
             for (int i=0; i<pmtID.size(); i++)
             {
@@ -229,16 +248,17 @@ void  Test_Modify( const string& fileName, std::string fitName = "" )
                 TVector3 XdiffPMT_u= XdiffPMT.Unit();
                 TVector3 XdiffPMT_cos= pmtCoord-eventPosition;
                 TVector3 XdiffPMT_cos_u= XdiffPMT_cos.Unit();
+               double costheta_1= pmtCoord.Unit().Dot(eventPosition_2.Unit());;
                 
-                avg_costheta+= pmtCoord.Unit().Dot(eventPosition_2.Unit());
+                sum_costheta_1+= costheta_1;
                 
                 h_costheta->Fill(Xdiff_u.Dot(XdiffPMT_u));
                 h_dotvec->Fill(XdiffPMT_cos_u.Dot(XdiffPMT_u));
                 
-                h_costheta_new->Fill(pmtCoord.Unit().Dot(eventPosition_2.Unit()));
-                count_costhetanew++;
+                h_costheta_new_1->Fill(costheta_1);
+                count_costhetanew_1++;
                 if(pmtCoord.Unit().Dot(eventPosition_2.Unit())>0.7)
-                    countcostheta_new_GT0P7++;
+                    countcostheta_new_GT0P7_1++;
                 
                 h_timeresidual_costheta->Fill(pmtCoord.Unit().Dot(eventPosition_2.Unit()), timeResV.at(i));
                 
@@ -253,22 +273,226 @@ void  Test_Modify( const string& fileName, std::string fitName = "" )
             }
             
             //  if(avg_costheta/pmtID.size()>0.7)
-            h_avgcosthetanew->Fill(avg_costheta/pmtID.size());
-            count_costhetawhole++;
-            if(avg_costheta/pmtID.size()>0.7)
-                countcostheta_GT0P7++;
+            h_avgcosthetanew_1->Fill(sum_costheta_1/pmtID.size());
+            count_costhetawhole_1++;
+            if(sum_costheta_1/pmtID.size()>0.7)
+                countcostheta_GT0P7_1++;
+            //break;
+        }
+    //}
+    //std::cout << "Number of events that passed offline trigger = " << nEvent_PassedTrigger << std::endl;
+    //cout << "Total_event_triggered_0 = " << Total_event_triggered_0 << endl;
+    //cout << "Total_event_triggered_1 = " << Total_event_triggered_1 << endl;
+    //cout << "Total_event_triggered_2 = " << Total_event_triggered_2 << endl;
+    //cout <<"Total Event Count = " <<  count_costhetanew_1<< "\t, Total event (costheta > 0.7) = " << countcostheta_new_GT0P7_1 << endl;
+    //cout << "Tagging efficiency = " << (countcostheta_new_GT0P7/count_costhetanew)*100.0 << endl;
+   // cout <<"Total Event Count = " <<  count_costhetawhole_1<< "\t, Total event (costheta > 0.7) = " << countcostheta_GT0P7_1 << endl;
+   // cout << "Tagging efficiency = " << (countcostheta_GT0P7_1/count_costhetawhole_1)*100.0 << endl;
+    
+
+    //*************************************************************
+    if(pmtID.size()>=2)
+        {
+            TVector3 Xdiff=eventPosition_2-eventPosition;
+            TVector3 Xdiff_u = Xdiff.Unit();
+            
+            // cout<<"event number = "<<iEntry<<endl;
+            // cout<<eventPosition.x()<<"  , "<<eventPosition.y()<<"  , "<<eventPosition.z()<<endl;
+            //cout<<eventPosition_2.x()<<"  , "<<eventPosition_2.y()<<"  , "<<eventPosition_2.z()<<endl;
+            //const RAT::DS::EV& rEV = rDS.GetEV( iEV );
+            //cout<<"GTID ="<<GTID.at(0)<<endl;
+            // cout<<"cos_theta="<<cos(eventPosition.Theta())<<" ,phi = "<<eventPosition.Phi()<<endl;
+            h_theta_phi_mc->Fill(cos(eventPosition.Theta()),eventPosition.Phi());
+            // cout<<"cos_theta="<<cos(eventPosition_2.Theta())<<" ,phi = "<<eventPosition_2.Phi()<<endl;
+            h_theta_phi_int->Fill(cos(eventPosition_2.Theta()),eventPosition_2.Phi());
+            
+            double sum_costheta_2=0;
+           // double Total = 0;
+            for (int i=0; i<pmtID.size(); i++)
+            {
+                //cout<<"pmt ID: "<<pmtID.at(i)<<endl;
+                TVector3 pmtCoord = pmtInfo.GetPosition( pmtID.at(i) );
+                TVector3 XdiffPMT = pmtCoord-eventPosition_2;
+                TVector3 XdiffPMT_u= XdiffPMT.Unit();
+                TVector3 XdiffPMT_cos= pmtCoord-eventPosition;
+                TVector3 XdiffPMT_cos_u= XdiffPMT_cos.Unit();
+               double costheta_2= pmtCoord.Unit().Dot(eventPosition_2.Unit());;
+                
+                sum_costheta_2+= costheta_2;
+                
+                h_costheta->Fill(Xdiff_u.Dot(XdiffPMT_u));
+                h_dotvec->Fill(XdiffPMT_cos_u.Dot(XdiffPMT_u));
+                
+                h_costheta_new_2->Fill(costheta_2);
+                count_costhetanew_2++;
+                if(pmtCoord.Unit().Dot(eventPosition_2.Unit())>0.7)
+                    countcostheta_new_GT0P7_2++;
+                
+                h_timeresidual_costheta->Fill(pmtCoord.Unit().Dot(eventPosition_2.Unit()), timeResV.at(i));
+                
+                double Ang_diif_1= fabs((pmtCoord.Theta())- (eventPosition.Theta()));
+                double Ang_diif_2= cos(pmtCoord.Theta())- cos(eventPosition_2.Theta());
+                //double Ang_diif_1= (pmtCoord.CosTheta())- (eventPosition.CosTheta());
+                //cout<<"cos_theta="<<cos(pmtCoord.Theta())<<" ,phi = "<<pmtCoord.Phi()<<endl;
+                //cout<<"x="<<pmtCoord.x()<<" ,y= "<<pmtCoord.y()<<" ,z= "<<pmtCoord.z()<<endl;
+                h_theta_phi->Fill(cos(pmtCoord.Theta()),pmtCoord.Phi());
+                h_theta_Ang_diif->Fill(Ang_diif_1);
+                h_theta_Ang_diif_2->Fill(Ang_diif_2);
+            }
+            
+            //  if(avg_costheta/pmtID.size()>0.7)
+            h_avgcosthetanew_2->Fill(sum_costheta_2/pmtID.size());
+            count_costhetawhole_2++;
+            if(sum_costheta_2/pmtID.size()>0.7)
+                countcostheta_GT0P7_2++;
+            //break;
+        }
+        //*************************************************************
+    if(pmtID.size()>=3)
+        {
+            TVector3 Xdiff=eventPosition_2-eventPosition;
+            TVector3 Xdiff_u = Xdiff.Unit();
+            
+            // cout<<"event number = "<<iEntry<<endl;
+            // cout<<eventPosition.x()<<"  , "<<eventPosition.y()<<"  , "<<eventPosition.z()<<endl;
+            //cout<<eventPosition_2.x()<<"  , "<<eventPosition_2.y()<<"  , "<<eventPosition_2.z()<<endl;
+            //const RAT::DS::EV& rEV = rDS.GetEV( iEV );
+            //cout<<"GTID ="<<GTID.at(0)<<endl;
+            // cout<<"cos_theta="<<cos(eventPosition.Theta())<<" ,phi = "<<eventPosition.Phi()<<endl;
+            h_theta_phi_mc->Fill(cos(eventPosition.Theta()),eventPosition.Phi());
+            // cout<<"cos_theta="<<cos(eventPosition_2.Theta())<<" ,phi = "<<eventPosition_2.Phi()<<endl;
+            h_theta_phi_int->Fill(cos(eventPosition_2.Theta()),eventPosition_2.Phi());
+            
+            double sum_costheta_3=0;
+           // double Total = 0;
+            for (int i=0; i<pmtID.size(); i++)
+            {
+                //cout<<"pmt ID: "<<pmtID.at(i)<<endl;
+                TVector3 pmtCoord = pmtInfo.GetPosition( pmtID.at(i) );
+                TVector3 XdiffPMT = pmtCoord-eventPosition_2;
+                TVector3 XdiffPMT_u= XdiffPMT.Unit();
+                TVector3 XdiffPMT_cos= pmtCoord-eventPosition;
+                TVector3 XdiffPMT_cos_u= XdiffPMT_cos.Unit();
+               double costheta_3= pmtCoord.Unit().Dot(eventPosition_2.Unit());;
+                
+                sum_costheta_3+= costheta_3;
+                
+                h_costheta->Fill(Xdiff_u.Dot(XdiffPMT_u));
+                h_dotvec->Fill(XdiffPMT_cos_u.Dot(XdiffPMT_u));
+                
+                h_costheta_new_3->Fill(costheta_3);
+                count_costhetanew_3++;
+                if(pmtCoord.Unit().Dot(eventPosition_2.Unit())>0.7)
+                    countcostheta_new_GT0P7_3++;
+                
+                h_timeresidual_costheta->Fill(pmtCoord.Unit().Dot(eventPosition_2.Unit()), timeResV.at(i));
+                
+                double Ang_diif_1= fabs((pmtCoord.Theta())- (eventPosition.Theta()));
+                double Ang_diif_2= cos(pmtCoord.Theta())- cos(eventPosition_2.Theta());
+                //double Ang_diif_1= (pmtCoord.CosTheta())- (eventPosition.CosTheta());
+                //cout<<"cos_theta="<<cos(pmtCoord.Theta())<<" ,phi = "<<pmtCoord.Phi()<<endl;
+                //cout<<"x="<<pmtCoord.x()<<" ,y= "<<pmtCoord.y()<<" ,z= "<<pmtCoord.z()<<endl;
+                h_theta_phi->Fill(cos(pmtCoord.Theta()),pmtCoord.Phi());
+                h_theta_Ang_diif->Fill(Ang_diif_1);
+                h_theta_Ang_diif_2->Fill(Ang_diif_2);
+            }
+            
+            //  if(avg_costheta/pmtID.size()>0.7)
+            h_avgcosthetanew_3->Fill(sum_costheta_3/pmtID.size());
+            count_costhetawhole_3++;
+            if(sum_costheta_3/pmtID.size()>0.7)
+                countcostheta_GT0P7_3++;
+            //break;
+        }
+               //*************************************************************
+    if(pmtID.size()>=4)
+        {
+            TVector3 Xdiff=eventPosition_2-eventPosition;
+            TVector3 Xdiff_u = Xdiff.Unit();
+            
+            // cout<<"event number = "<<iEntry<<endl;
+            // cout<<eventPosition.x()<<"  , "<<eventPosition.y()<<"  , "<<eventPosition.z()<<endl;
+            //cout<<eventPosition_2.x()<<"  , "<<eventPosition_2.y()<<"  , "<<eventPosition_2.z()<<endl;
+            //const RAT::DS::EV& rEV = rDS.GetEV( iEV );
+            //cout<<"GTID ="<<GTID.at(0)<<endl;
+            // cout<<"cos_theta="<<cos(eventPosition.Theta())<<" ,phi = "<<eventPosition.Phi()<<endl;
+            h_theta_phi_mc->Fill(cos(eventPosition.Theta()),eventPosition.Phi());
+            // cout<<"cos_theta="<<cos(eventPosition_2.Theta())<<" ,phi = "<<eventPosition_2.Phi()<<endl;
+            h_theta_phi_int->Fill(cos(eventPosition_2.Theta()),eventPosition_2.Phi());
+            
+            double sum_costheta_4=0;
+           // double Total = 0;
+            for (int i=0; i<pmtID.size(); i++)
+            {
+                //cout<<"pmt ID: "<<pmtID.at(i)<<endl;
+                TVector3 pmtCoord = pmtInfo.GetPosition( pmtID.at(i) );
+                TVector3 XdiffPMT = pmtCoord-eventPosition_2;
+                TVector3 XdiffPMT_u= XdiffPMT.Unit();
+                TVector3 XdiffPMT_cos= pmtCoord-eventPosition;
+                TVector3 XdiffPMT_cos_u= XdiffPMT_cos.Unit();
+               double costheta_4= pmtCoord.Unit().Dot(eventPosition_2.Unit());;
+                
+                sum_costheta_4+= costheta_4;
+                
+                h_costheta->Fill(Xdiff_u.Dot(XdiffPMT_u));
+                h_dotvec->Fill(XdiffPMT_cos_u.Dot(XdiffPMT_u));
+                
+                h_costheta_new_4->Fill(costheta_4);
+                count_costhetanew_4++;
+                if(pmtCoord.Unit().Dot(eventPosition_2.Unit())>0.7)
+                    countcostheta_new_GT0P7_4++;
+                
+                h_timeresidual_costheta->Fill(pmtCoord.Unit().Dot(eventPosition_2.Unit()), timeResV.at(i));
+                
+                double Ang_diif_1= fabs((pmtCoord.Theta())- (eventPosition.Theta()));
+                double Ang_diif_2= cos(pmtCoord.Theta())- cos(eventPosition_2.Theta());
+                //double Ang_diif_1= (pmtCoord.CosTheta())- (eventPosition.CosTheta());
+                //cout<<"cos_theta="<<cos(pmtCoord.Theta())<<" ,phi = "<<pmtCoord.Phi()<<endl;
+                //cout<<"x="<<pmtCoord.x()<<" ,y= "<<pmtCoord.y()<<" ,z= "<<pmtCoord.z()<<endl;
+                h_theta_phi->Fill(cos(pmtCoord.Theta()),pmtCoord.Phi());
+                h_theta_Ang_diif->Fill(Ang_diif_1);
+                h_theta_Ang_diif_2->Fill(Ang_diif_2);
+            }
+            
+            //  if(avg_costheta/pmtID.size()>0.7)
+            h_avgcosthetanew_4->Fill(sum_costheta_4/pmtID.size());
+            count_costhetawhole_4++;
+            if(sum_costheta_4/pmtID.size()>0.7)
+                countcostheta_GT0P7_4++;
             //break;
         }
     }
+   //std::cout << "Number of events that passed offline trigger = " << nEvent_PassedTrigger << std::endl;
+    //cout << "Total_event_triggered_0 = " << Total_event_triggered_0 << endl;
+    //cout << "Total_event_triggered_1 = " << Total_event_triggered_1 << endl;
+    //cout << "Total_event_triggered_2 = " << Total_event_triggered_2 << endl;
     std::cout << "Number of events that passed offline trigger = " << nEvent_PassedTrigger << std::endl;
     //cout << "Total_event_triggered_0 = " << Total_event_triggered_0 << endl;
     //cout << "Total_event_triggered_1 = " << Total_event_triggered_1 << endl;
     //cout << "Total_event_triggered_2 = " << Total_event_triggered_2 << endl;
-    cout <<"Total Event Count = " <<  count_costhetanew<< "\t, Total event (costheta > 0.7) = " << countcostheta_new_GT0P7 << endl;
-    cout << "Tagging efficiency = " << (countcostheta_new_GT0P7/count_costhetanew)*100.0 << endl;
-    cout <<"Total Event Count = " <<  count_costhetawhole<< "\t, Total event (costheta > 0.7) = " << countcostheta_GT0P7 << endl;
-    cout << "Tagging efficiency = " << (countcostheta_GT0P7/count_costhetawhole)*100.0 << endl;
-    
+    cout <<"Total Event_1 = " <<  count_costhetanew_1<< "\t, Total Event_1 (costheta > 0.7) = " << countcostheta_new_GT0P7_1 << endl;
+    cout << "Tagging Efficiency_1 = " << (countcostheta_new_GT0P7_1/count_costhetanew_1)*100.0 << endl;
+    cout <<"Total Event_avg_1 = " <<  count_costhetawhole_1<< "\t, Total Event_avg_1 (costheta > 0.7) = " << countcostheta_GT0P7_1 << endl;
+    cout << "Tagging Efficiency_avg_1 = " << (countcostheta_GT0P7_1/count_costhetawhole_1)*100.0 << endl;
+    cout << "   " << endl;
+
+    cout <<"Total Event_2 = " <<  count_costhetanew_2<< "\t, Total Event_2 (costheta > 0.7) = " << countcostheta_new_GT0P7_2 << endl;
+    cout << "Tagging Efficiency_2 = " << (countcostheta_new_GT0P7_2/count_costhetanew_2)*100.0 << endl;
+    cout <<"Total Event_avg_2 = " <<  count_costhetawhole_2<< "\t, Total Event_avg_2 (costheta > 0.7) = " << countcostheta_GT0P7_2 << endl;
+    cout << "Tagging Efficiency_avg_2 = " << (countcostheta_GT0P7_2/count_costhetawhole_2)*100.0 << endl;
+    cout << "   " << endl;
+
+    cout <<"Total Event_3 = " <<  count_costhetanew_3<< "\t, Total Event_3 (costheta > 0.7) = " << countcostheta_new_GT0P7_3 << endl;
+    cout << "Tagging Efficiency_3 = " << (countcostheta_new_GT0P7_3/count_costhetanew_3)*100.0 << endl;
+    cout <<"Total Event_avg_3 = " <<  count_costhetawhole_3<< "\t, Total Event_avg_3 (costheta > 0.7) = " << countcostheta_GT0P7_3 << endl;
+    cout << "Tagging Efficiency_avg_3 = " << (countcostheta_GT0P7_3/count_costhetawhole_3)*100.0 << endl;
+    cout << "   " << endl;
+
+    cout <<"Total Event_4 = " <<  count_costhetanew_4<< "\t, Total Event_4 (costheta > 0.7) = " << countcostheta_new_GT0P7_4 << endl;
+    cout << "Tagging Efficiency_4 = " << (countcostheta_new_GT0P7_4/count_costhetanew_4)*100.0 << endl;
+    cout <<"Total Event_avg_4 = " <<  count_costhetawhole_4<< "\t, Total Event_avg_4 (costheta > 0.7) = " << countcostheta_GT0P7_4 << endl;
+    cout << "Tagging Efficiency_avg_4 = " << (countcostheta_GT0P7_4/count_costhetawhole_4)*100.0 << endl;
+    //******************************************************************
     //hHitTimeResiduals->GetYaxis()->SetTitle( "Count per 1 ns bin" );
     //hHitTimeResiduals->GetXaxis()->SetTitle( "Hit time residuals [ns]" );
     hHitTimeResiduals->Draw();
