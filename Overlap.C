@@ -12,10 +12,10 @@ void Overlap()
    // gPad->SetLogx(1);
 
 
-	TFile f1("myfiles_mc_1_k40_avg_1.root");
-	TFile f2("myfiles_mc_1_k40_avg_2.root");
-	TFile f3("myfiles_mc_1_k40_avg_3.root");
-	TFile f4("myfiles_mc_1_k40_avg_4.root");
+	TFile f1("myfiles_mc_1_kr85_all_tereza.root");
+	//TFile f2("myfiles_mc_1_k40_avg_2.root");
+	//TFile f3("myfiles_mc_1_k40_avg_3.root");
+	//TFile f4("myfiles_mc_1_k40_avg_4.root");
 	//TFile f5("WaterProtonDecay_Exwater.root");
 	//TFile f6("WaterProtonDecay.root");
 	//TFile f7("WaterTl_AV.root");
@@ -25,27 +25,33 @@ void Overlap()
 
     
 	//TH1F *h1 = (TH1F*)f1.Get("qpdtProbability");
-	TH1F *h1 = (TH1F*)f1.Get("avgcosthetanew");
+	TH1F *h1 = (TH1F*)f1.Get("avgcosthetanew_1");
+	//TH1F *h1 = (TH1F*)f1.Get("costheta_new_1");
 	//h1->Sumw2();
 	h1->Scale(1/h1->Integral());
 	//h1->Rebin(6);
 	//TH1F *h1 = (TH1F*)f1.Get("qpdtQMax");
 	//TH1F *h2 = (TH1F*)f2.Get("qpdtProbability");
-	TH1F *h2 = (TH1F*)f2.Get("avgcosthetanew");
+	TH1F *h2 = (TH1F*)f1.Get("avgcosthetanew_2");
+	//TH1F *h2 = (TH1F*)f1.Get("costheta_new_2");
 	//h2->Sumw2();
 
 	h2->Scale(1/h2->Integral());
+	//double total = h2->Integral();
+	//double total_2 = h2->Integral()
 	//h2->Rebin(6);
 	//TH1F *h2 = (TH1F*)f2.Get("qpdtQMax");
     //TH1F *h3 = (TH1F*)f3.Get("qpdtProbability");
-	TH1F *h3 = (TH1F*)f3.Get("avgcosthetanew");
+	TH1F *h3 = (TH1F*)f1.Get("avgcosthetanew_3");
+	//TH1F *h3 = (TH1F*)f1.Get("costheta_new_3");
 	//h3->Sumw2();
 
-   h3->Scale(1/h3->Integral());
+    h3->Scale(1/h3->Integral());
 	//h3->Rebin(6);
 	//TH1F *h3 = (TH1F*)f3.Get("qpdtQMax");
 	//TH1F *h4 = (TH1F*)f4.Get("qpdtProbability");
-	TH1F *h4 = (TH1F*)f4.Get("avgcosthetanew");
+	TH1F *h4 = (TH1F*)f1.Get("avgcosthetanew_4");
+	//TH1F *h4 = (TH1F*)f1.Get("costheta_new_4");
 	//h4->Sumw2();
 	h4->Scale(1/h4->Integral());
 	
@@ -129,7 +135,7 @@ void Overlap()
    C->Update();
 	
 	
-   C->SaveAs("avgcosthetanew_K40_log.pdf");
+   C->SaveAs("Kr85_all_avg_tereza.pdf");
    C->SaveAs("Overlap_nrmlised_newlog.root");
 
 }
