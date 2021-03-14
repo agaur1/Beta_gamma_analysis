@@ -118,10 +118,10 @@ void Overlap()
 
    TLegend leg(0.2,0.8,0.4,0.9);
    // TLegend leg(0.3,0.7,0.7,0.9);
-   leg.AddEntry(h1,"Earlynhit #eq 1");
-   leg.AddEntry(h2,"Earlynhit #eq 2");
-  leg.AddEntry(h3,"Earlynhit #eq 3");
-   leg.AddEntry(h4,"Earlynhit #eq 4");
+   leg.AddEntry(h1,"Earlynhit #geq 1");
+   leg.AddEntry(h2,"Earlynhit #geq 2");
+  leg.AddEntry(h3,"Earlynhit #geq 3");
+   leg.AddEntry(h4,"Earlynhit #geq 4");
    //leg.AddEntry(h5,"WaterProtonDecay_Exwater");
    //leg.AddEntry(h6,"WaterProtonDecay");
   //leg.AddEntry(h7,"WaterTl_AV");

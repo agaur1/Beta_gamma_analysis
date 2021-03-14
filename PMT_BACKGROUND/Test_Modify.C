@@ -22,12 +22,12 @@
 #include <TStyle.h>
 #include <TLegend.h>
 
-void  Test_Modify( const string& , std::string fitName = "" )
+void  Test_Modify( const string& fileName, std::string fitName = "" )
 //void  PlotHitTimeResidualsFitPosition( const string& fileName, std::string fitName = "")
 {
     //cout<<"debug 1 " <<endl;
     // DEFINE OUTPUT ROOT FILE
-    TFile *file = new TFile("myfiles_mc_1_kr85_all_tereza.root","RECREATE");
+    TFile *file = new TFile("PartialScintTl208_PmtRun_NC.root","RECREATE");
     
     TCanvas *C = new TCanvas("c", "c",800,800);
     
@@ -95,7 +95,7 @@ void  Test_Modify( const string& , std::string fitName = "" )
     int count_costhetawhole_4 = 0;
     int countcostheta_GT0P7_4=0;
     int count_costhetanew_4=0;
-    int countcostheta_new_GT0P7_4;
+    int countcostheta_new_GT0P7_4=0;
     //double Total_event_triggered=0;
     //double Total_event_triggered_0=0;
    //double Total_event_triggered_1=0;
@@ -186,7 +186,7 @@ void  Test_Modify( const string& , std::string fitName = "" )
                 // Time residuals estimate the photon emission time relative to the event start so subtract off the transit time and eventTime
                 double timeResidual = pmtCal.GetTime() - transitTime - eventTime;
                 //if(timeResidual<-100 || timeResidual>-20)continue
-                if(timeResidual>= -20 && timeResidual<= -2)
+                if(timeResidual>= -50 && timeResidual<= -20)
                 {
                     count_nhits_early++;
                     //cout<<"iEntry " << iEntry<<"\tcount_nhits_early " << count_nhits_early<< endl;
@@ -222,7 +222,7 @@ void  Test_Modify( const string& , std::string fitName = "" )
         // DataNotFound --> implies no fit results are present, don't catch.
         // }
         //cout<<"GTID ="<<GTID.size()<<endl;
-        if(pmtID.size()=1)
+        if(pmtID.size()==1)
         {
             TVector3 Xdiff=eventPosition_2-eventPosition;
             TVector3 Xdiff_u = Xdiff.Unit();
@@ -290,7 +290,7 @@ void  Test_Modify( const string& , std::string fitName = "" )
     
 
     //*************************************************************
-    if(pmtID.size()=2)
+    if(pmtID.size()==2)
         {
             TVector3 Xdiff=eventPosition_2-eventPosition;
             TVector3 Xdiff_u = Xdiff.Unit();
@@ -347,7 +347,7 @@ void  Test_Modify( const string& , std::string fitName = "" )
             //break;
         }
         //*************************************************************
-    if(pmtID.size()=3)
+    if(pmtID.size()==3)
         {
             TVector3 Xdiff=eventPosition_2-eventPosition;
             TVector3 Xdiff_u = Xdiff.Unit();
@@ -404,7 +404,7 @@ void  Test_Modify( const string& , std::string fitName = "" )
             //break;
         }
                //*************************************************************
-    if(pmtID.size()=4)
+    if(pmtID.size()==4)
         {
             TVector3 Xdiff=eventPosition_2-eventPosition;
             TVector3 Xdiff_u = Xdiff.Unit();
@@ -471,32 +471,32 @@ void  Test_Modify( const string& , std::string fitName = "" )
     //cout << "Total_event_triggered_2 = " << Total_event_triggered_2 << endl;
     cout << " \n Print info for nhits_early=1\n  " << endl;
     cout <<"Total Event_1 = " <<  count_costhetanew_1<< "\t, Total Event_1 (costheta > 0.7) = " << countcostheta_new_GT0P7_1 << endl;
-    cout << "Tagging Efficiency_1 = " << (countcostheta_new_GT0P7_1/count_costhetanew_1)*100.0 << endl;
+    cout << "Tagging Efficiency_1 = " << (((double)countcostheta_new_GT0P7_1)/((double)count_costhetanew_1))*100.0 << endl;
     cout <<"Total Event_avg_1 = " <<  count_costhetawhole_1<< "\t, Total Event_avg_1 (costheta > 0.7) = " << countcostheta_GT0P7_1 << endl;
-    cout << "Tagging Efficiency_avg_1 = " << (countcostheta_GT0P7_1/count_costhetawhole_1)*100.0 << endl;
+    cout << "Tagging Efficiency_avg_1 = " << (((double)countcostheta_GT0P7_1)/((double)count_costhetawhole_1))*100.0 << endl;
 
     cout << " \n Print info for nhits_early=2\n  " << endl;
    
     cout <<"Total Event_2 = " <<  count_costhetanew_2<< "\t, Total Event_2 (costheta > 0.7) = " << countcostheta_new_GT0P7_2 << endl;
-    cout << "Tagging Efficiency_2 = " << (countcostheta_new_GT0P7_2/count_costhetanew_2)*100.0 << endl;
+    cout << "Tagging Efficiency_2 = " << (((double)countcostheta_new_GT0P7_2)/((double)count_costhetanew_2))*100.0 << endl;
     cout <<"Total Event_avg_2 = " <<  count_costhetawhole_2<< "\t, Total Event_avg_2 (costheta > 0.7) = " << countcostheta_GT0P7_2 << endl;
-    cout << "Tagging Efficiency_avg_2 = " << (countcostheta_GT0P7_2/count_costhetawhole_2)*100.0 << endl;
+    cout << "Tagging Efficiency_avg_2 = " << (((double)countcostheta_GT0P7_2)/((double)count_costhetawhole_2))*100.0 << endl;
     cout << "   " << endl;
     
     cout << " \n Print info for nhits_early=3\n  " << endl;
 
     cout <<"Total Event_3 = " <<  count_costhetanew_3<< "\t, Total Event_3 (costheta > 0.7) = " << countcostheta_new_GT0P7_3 << endl;
-    cout << "Tagging Efficiency_3 = " << (countcostheta_new_GT0P7_3/count_costhetanew_3)*100.0 << endl;
+    cout << "Tagging Efficiency_3 = " << (((double)countcostheta_new_GT0P7_3)/((double)count_costhetanew_3))*100.0 << endl;
     cout <<"Total Event_avg_3 = " <<  count_costhetawhole_3<< "\t, Total Event_avg_3 (costheta > 0.7) = " << countcostheta_GT0P7_3 << endl;
-    cout << "Tagging Efficiency_avg_3 = " << (countcostheta_GT0P7_3/count_costhetawhole_3)*100.0 << endl;
+    cout << "Tagging Efficiency_avg_3 = " << (((double)countcostheta_GT0P7_3)/((double)count_costhetawhole_3))*100.0 << endl;
     cout << "   " << endl;
     
     cout << " \n Print info for nhits_early=4\n  " << endl;
 
     cout <<"Total Event_4 = " <<  count_costhetanew_4<< "\t, Total Event_4 (costheta > 0.7) = " << countcostheta_new_GT0P7_4 << endl;
-    cout << "Tagging Efficiency_4 = " << (countcostheta_new_GT0P7_4/count_costhetanew_4)*100.0 << endl;
+    cout << "Tagging Efficiency_4 = " << (((double)countcostheta_new_GT0P7_4)/((double)count_costhetanew_4))*100.0 << endl;
     cout <<"Total Event_avg_4 = " <<  count_costhetawhole_4<< "\t, Total Event_avg_4 (costheta > 0.7) = " << countcostheta_GT0P7_4 << endl;
-    cout << "Tagging Efficiency_avg_4 = " << (countcostheta_GT0P7_4/count_costhetawhole_4)*100.0 << endl;
+    cout << "Tagging Efficiency_avg_4 = " << (((double)countcostheta_GT0P7_4)/((double)count_costhetawhole_4))*100.0 << endl;
     //******************************************************************
     //hHitTimeResiduals->GetYaxis()->SetTitle( "Count per 1 ns bin" );
     //hHitTimeResiduals->GetXaxis()->SetTitle( "Hit time residuals [ns]" );
